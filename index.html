@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>택배용 화물자동차 운송사업 허가 신청 현황 확인서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-light: #4a4a6a;
+    --paper: #faf8f3;
+    --paper-dark: #f0ede4;
+    --accent: #8b1a1a;
+    --accent-light: #c0392b;
+    --border: #c8c0a8;
+    --border-dark: #a09070;
+    --gold: #b8952a;
+    --success: #2d6a4f;
+    --warning: #e07b00;
+    --error: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #e8e0d0;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(184,149,42,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,26,26,0.06) 0%, transparent 50%);
+    min-height: 100vh;
+    padding: 40px 20px;
+    color: var(--ink);
+  }
+
+  .form-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── 헤더 ── */
+  .doc-header {
+    background: var(--paper);
+    border: 2px solid var(--border-dark);
+    border-bottom: none;
+    padding: 36px 48px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 50%, var(--accent) 100%);
+  }
+  .doc-header::after {
+    content: '화물자동차 운수사업법 시행규칙 별지 제1호 서식';
+    position: absolute; bottom: 10px; right: 20px;
+    font-size: 10px; color: var(--border-dark); font-family: 'Noto Serif KR', serif;
+  }
+  .doc-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px; font-weight: 700; letter-spacing: 4px;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .doc-subtitle {
+    font-size: 12px; color: var(--ink-light); letter-spacing: 1px;
+  }
+  .seal-area {
+    position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+    width: 60px; height: 60px; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--border-dark); text-align: center; line-height: 1.4;
+  }
+
+  /* ── 메인 폼 ── */
+  .doc-body {
+    background: var(--paper);
+    border: 2px solid var(--border-dark);
+    padding: 0 0 40px;
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .section-header {
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: white;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px; color: var(--ink);
+  }
+  .section-body { padding: 20px 24px; }
+
+  /* ── 필드 그리드 ── */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 24px;
+  }
+  .field-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .field-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-group.span-2 { grid-column: span 2; }
+  .field-group.span-3 { grid-column: span 3; }
+
+  label {
+    font-size: 11px; font-weight: 600; color: var(--ink-light);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  label .required { color: var(--accent); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 9px 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: white;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139,26,26,0.08);
+  }
+  input.verified { border-color: var(--success); background: #f0fff4; }
+  input.mismatch { border-color: var(--error); background: #fff5f5; }
+
+  /* ── 구분자 ── */
+  .field-divider {
+    display: flex; align-items: center; gap: 8px; margin: 4px 0;
+  }
+  .field-divider input { flex: 1; }
+  .field-divider span { color: var(--border-dark); font-weight: 700; font-size: 16px; }
+
+  /* ── 주민등록번호 마스킹 ── */
+  .rrn-wrap { display: flex; align-items: center; gap: 4px; }
+  .rrn-wrap input:first-child { flex: 6; }
+  .rrn-sep { color: var(--border-dark); font-weight: 700; font-size: 18px; padding: 0 2px; }
+  .rrn-wrap input:last-child { flex: 7; letter-spacing: 3px; }
+
+  /* ── 체크박스 ── */
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 4px; }
+  .checkbox-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .checkbox-item input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--accent);
+    cursor: pointer; flex-shrink: 0;
+  }
+  .checkbox-item span { font-size: 13px; color: var(--ink); }
+
+  /* ── 날짜 범위 ── */
+  .date-range { display: flex; align-items: center; gap: 10px; }
+  .date-range input { flex: 1; }
+  .date-range .tilde { font-size: 18px; color: var(--border-dark); flex-shrink: 0; }
+
+  /* ── 파일 업로드 ── */
+  .upload-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .upload-item {
+    border: 1.5px dashed var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    background: white;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .upload-item:hover { border-color: var(--accent); background: #fdf9f9; }
+  .upload-item.has-file { border-color: var(--success); border-style: solid; background: #f5fff8; }
+  .upload-label {
+    font-size: 12px; font-weight: 600; color: var(--ink-light);
+    margin-bottom: 10px; display: block;
+  }
+  .upload-label .required { color: var(--accent); }
+  .upload-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 8px 14px; border: 1px solid var(--border);
+    border-radius: 4px; background: var(--paper-dark);
+    font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer; color: var(--ink); transition: all 0.2s;
+    width: 100%;
+  }
+  .upload-btn:hover { border-color: var(--accent); color: var(--accent); background: white; }
+  .upload-btn input[type="file"] { display: none; }
+  .upload-status {
+    margin-top: 8px; font-size: 11px; min-height: 16px;
+    display: flex; align-items: flex-start; gap: 4px; flex-direction: column;
+  }
+  .status-filename { color: var(--success); font-weight: 500; word-break: break-all; }
+  .status-ocr { font-size: 11px; padding: 4px 8px; border-radius: 3px; }
+  .status-ocr.match { background: #d4edda; color: var(--success); }
+  .status-ocr.mismatch { background: #f8d7da; color: var(--error); }
+  .status-ocr.checking { background: #fff3cd; color: var(--warning); }
+
+  /* ── 개인정보 동의 ── */
+  .privacy-box {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .privacy-header {
+    background: var(--paper-dark);
+    padding: 10px 16px;
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    border-bottom: 1px solid var(--border);
+  }
+  .privacy-content {
+    padding: 14px 16px;
+    font-size: 11.5px; line-height: 1.8; color: var(--ink-light);
+    max-height: 120px; overflow-y: auto;
+  }
+  .privacy-content strong { color: var(--ink); }
+  .privacy-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .privacy-agree { display: flex; align-items: center; gap: 8px; }
+  .privacy-agree input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+  .privacy-agree label { font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; }
+
+  /* ── 서명란 ── */
+  .signature-wrap {
+    flex: 1; min-width: 200px;
+  }
+  .signature-label {
+    font-size: 11px; color: var(--ink-light); margin-bottom: 4px; font-weight: 600;
+  }
+  .signature-pad-wrap {
+    border: 1px solid var(--border); border-radius: 3px; background: white;
+    position: relative; overflow: hidden;
+  }
+  .signature-pad-wrap canvas {
+    display: block; width: 100%; height: 80px; cursor: crosshair;
+  }
+  .signature-clear {
+    position: absolute; top: 4px; right: 6px;
+    background: none; border: none; cursor: pointer;
+    font-size: 10px; color: var(--border-dark); padding: 2px 6px;
+    border-radius: 2px;
+  }
+  .signature-clear:hover { background: var(--paper-dark); color: var(--accent); }
+
+  /* ── OCR 결과 패널 ── */
+  .ocr-panel {
+    background: #fffbf0;
+    border: 1px solid #e8d88a;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    display: none;
+  }
+  .ocr-panel.visible { display: block; }
+  .ocr-panel-title {
+    font-weight: 700; color: var(--gold); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ocr-result-row {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 3px 0; border-bottom: 1px solid #f0e8c0;
+  }
+  .ocr-result-row:last-child { border-bottom: none; }
+  .ocr-key { color: var(--ink-light); width: 90px; flex-shrink: 0; }
+  .ocr-val { color: var(--ink); flex: 1; }
+  .ocr-badge {
+    font-size: 10px; padding: 1px 6px; border-radius: 10px; flex-shrink: 0;
+  }
+  .ocr-badge.ok { background: #d4edda; color: var(--success); }
+  .ocr-badge.ng { background: #f8d7da; color: var(--error); }
+
+  /* ── 제출 버튼 ── */
+  .submit-area {
+    padding: 32px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .submit-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 48px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  }
+  .submit-btn:hover { background: #6b1414; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,26,26,0.3); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* ── 진행률 ── */
+  .progress-bar-wrap {
+    padding: 16px 48px 0;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .progress-label { font-size: 12px; color: var(--ink-light); flex-shrink: 0; }
+  .progress-bar {
+    flex: 1; height: 6px; background: var(--paper-dark);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--gold));
+    border-radius: 3px; transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-pct { font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+
+  /* ── 알림 토스트 ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--ink); color: white;
+    padding: 12px 20px; border-radius: 6px;
+    font-size: 13px; max-width: 320px;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--error); }
+  .toast.info { background: var(--gold); }
+
+  /* ── 구글 시트 미리보기 ── */
+  .sheets-preview {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px 24px;
+    display: none;
+  }
+  .sheets-preview.visible { display: block; }
+  .sheets-preview-title {
+    font-size: 12px; font-weight: 700; color: #188038;
+    display: flex; align-items: center; gap: 6px; margin-bottom: 10px;
+  }
+  .sheets-table {
+    width: 100%; border-collapse: collapse; font-size: 11px;
+    overflow-x: auto; display: block;
+  }
+  .sheets-table th {
+    background: #188038; color: white;
+    padding: 6px 10px; text-align: left; white-space: nowrap;
+  }
+  .sheets-table td {
+    padding: 5px 10px; border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap; color: var(--ink);
+  }
+  .sheets-table tr:nth-child(even) td { background: #f8fff8; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 640px) {
+    body { padding: 16px 8px; }
+    .doc-header { padding: 24px 20px 20px; }
+    .doc-title { font-size: 16px; letter-spacing: 2px; }
+    .seal-area { display: none; }
+    .section-body { padding: 16px 16px; }
+    .field-grid, .field-grid.cols-3 { grid-template-columns: 1fr; }
+    .field-group.span-2, .field-group.span-3 { grid-column: span 1; }
+    .upload-grid { grid-template-columns: 1fr; }
+    .submit-area { padding: 24px 16px; }
+    .progress-bar-wrap { padding: 16px 16px 0; }
+  }
+
+  /* ── 로딩 스피너 ── */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: var(--warning);
+    border-radius: 50%; animation: spin 0.6s linear infinite;
+    display: inline-block;
+  }
+
+  /* 구분선 */
+  .sub-divider {
+    border: none; border-top: 1px dashed var(--border);
+    margin: 16px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="form-wrapper">
+
+  <!-- 진행률 -->
+  <div class="progress-bar-wrap" style="background:var(--paper); border:2px solid var(--border-dark); border-bottom:none; border-top-left-radius:2px; border-top-right-radius:2px;">
+    <span class="progress-label">작성 진행률</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+
+  <!-- 헤더 -->
+  <div class="doc-header">
+    <div class="doc-title">택배용 화물자동차 운송사업 허가 신청 현황 확인서</div>
+    <div class="doc-subtitle">Parcel Freight Vehicle Transport Business Permit Application Form</div>
+    <div class="seal-area">처리기관<br>직인</div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- ① 신청인 기본 정보 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">신청인 기본 정보</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>성명 <span class="required">*</span></label>
+            <input type="text" id="name" placeholder="홍길동" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>연락처 (전화번호) <span class="required">*</span></label>
+            <input type="tel" id="phone" placeholder="010-0000-0000" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>핸드폰 번호</label>
+            <input type="tel" id="mobile" placeholder="010-0000-0000">
+          </div>
+          <div class="field-group">
+            <label>이메일</label>
+            <input type="email" id="email" placeholder="example@email.com">
+          </div>
+          <div class="field-group span-2">
+            <label>주민등록번호 <span class="required">*</span></label>
+            <div class="rrn-wrap">
+              <input type="text" id="rrn1" placeholder="앞 6자리" maxlength="6" data-required="true" inputmode="numeric">
+              <span class="rrn-sep">−</span>
+              <input type="password" id="rrn2" placeholder="뒷 7자리" maxlength="7" data-required="true" inputmode="numeric">
+            </div>
+          </div>
+         <div class="field-group span-2">
+            <label>주소 <span class="required">*</span></label>
+            <div style="display:flex; gap:8px; margin-bottom:6px;">
+              <input type="text" id="postcode" placeholder="우편번호"
+                style="width:120px; flex-shrink:0; background:#f5f5f5;" readonly>
+              <button type="button" onclick="searchAddress('main')"
+                style="padding:9px 16px; background:var(--accent); color:white;
+                border:none; border-radius:3px; cursor:pointer; font-size:12px;
+                font-family:'Noto Sans KR',sans-serif; white-space:nowrap;">
+                주소 검색
+              </button>
+            </div>
+            <input type="text" id="address" placeholder="도로명 주소 (검색 버튼 클릭)"
+              data-required="true" readonly style="background:#f5f5f5; margin-bottom:6px;">
+            <input type="text" id="addressDetail" placeholder="상세주소 입력 (동/호수 등)"
+              style="background:white;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 택배사업자 및 대리점 정보 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">택배사업자 및 대리점 정보</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>택배사업자명 <span class="required">*</span></label>
+            <input type="text" id="companyName" placeholder="예: CJ대한통운" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>대리점명 <span class="required">*</span></label>
+            <input type="text" id="agencyName" placeholder="대리점명 입력" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>대리점 대표자명 <span class="required">*</span></label>
+            <input type="text" id="agencyRepName" placeholder="대표자 성명" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>대리점 연락처</label>
+            <input type="tel" id="agencyPhone" placeholder="02-0000-0000">
+          </div>
+          <div class="field-group span-2">
+            <label>대리점 주소 <span class="required">*</span></label>
+            <input type="text" id="agencyAddress" placeholder="대리점 도로명 주소" data-required="true">
+          </div>
+        </div>
+        <hr class="sub-divider">
+        <div class="field-grid">
+          <div class="field-group span-2">
+            <label>전속운송 계약기간 <span class="required">*</span></label>
+            <div class="date-range">
+              <input type="date" id="contractStart" data-required="true">
+              <span class="tilde">~</span>
+              <input type="date" id="contractEnd" data-required="true">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 차량 정보 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">차량 정보</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid cols-3">
+          <div class="field-group">
+            <label>차량번호 <span class="required">*</span></label>
+            <input type="text" id="vehicleNo" placeholder="12가 3456" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>차종 <span class="required">*</span></label>
+            <input type="text" id="vehicleType" placeholder="예: 1톤 트럭" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>차명 (연식)</label>
+            <input type="text" id="vehicleModel" placeholder="예: 포터2 (2020년식)">
+          </div>
+          <div class="field-group">
+            <label>최대 적재량 <span class="required">*</span></label>
+            <div class="field-divider">
+              <input type="text" id="maxLoad" placeholder="1,000" data-required="true" style="text-align:right;">
+              <span>kg</span>
+            </div>
+          </div>
+          <div class="field-group span-2">
+            <label>차량 형태 <span class="required">*</span></label>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="vehicleShape" value="탑형">
+                <span>탑형 (Box Type)</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="vehicleShape" value="밴형">
+                <span>밴형 (Van Type)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ 운전면허 정보 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">운전면허 정보</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>운전면허 번호 <span class="required">*</span></label>
+            <input type="text" id="licenseNo" placeholder="00-00-000000-00" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>면허 종류 <span class="required">*</span></label>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="licenseType" value="1종 대형">
+                <span>1종 대형</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="licenseType" value="1종 보통">
+                <span>1종 보통</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="licenseType" value="1종 특수">
+                <span>1종 특수</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="licenseType" value="2종 보통">
+                <span>2종 보통</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑤ 화물운송종사자격 정보 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">화물운송종사자격 정보</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>자격증 번호 <span class="required">*</span></label>
+            <input type="text" id="certNo" placeholder="화물운송종사자격번호" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>자격 취득일 <span class="required">*</span></label>
+            <input type="date" id="certDate" data-required="true">
+          </div>
+          <div class="field-group">
+            <label>자격증 상 성명</label>
+            <input type="text" id="certName" placeholder="자격증에 기재된 성명">
+          </div>
+          <div class="field-group">
+            <label>자격증 상 연락처</label>
+            <input type="tel" id="certPhone" placeholder="010-0000-0000">
+          </div>
+          <div class="field-group">
+            <label>자격증 상 주민등록번호</label>
+            <div class="rrn-wrap">
+              <input type="text" id="certRrn1" placeholder="앞 6자리" maxlength="6" inputmode="numeric">
+              <span class="rrn-sep">−</span>
+              <input type="password" id="certRrn2" placeholder="뒷 7자리" maxlength="7" inputmode="numeric">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>자격증 상 핸드폰</label>
+            <input type="tel" id="certMobile" placeholder="010-0000-0000">
+          </div>
+          <div class="field-group span-2">
+            <label>자격증 상 주소</label>
+            <input type="text" id="certAddress" placeholder="자격증에 기재된 주소">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑥ 첨부서류 업로드 + OCR -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-title">첨부서류 업로드 및 자동 검증 (OCR)</div>
+      </div>
+      <div class="section-body">
+        <p style="font-size:12px; color:var(--ink-light); margin-bottom:16px;">
+          📎 파일 업로드 시 OCR로 자동 판독하여 입력 내용과 즉시 비교합니다. (이미지 또는 PDF)
+        </p>
+        <div class="upload-grid">
+
+          <!-- 운전면허증 -->
+          <div class="upload-item" id="uploadWrap_license">
+            <span class="upload-label">운전면허증 <span class="required">*</span></span>
+            <label class="upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              파일 선택
+              <input type="file" id="file_license" accept="image/*,.pdf" onchange="handleUpload(this, 'license')">
+            </label>
+            <div class="upload-status" id="status_license"></div>
+          </div>
+
+          <!-- 전속운송계약서 -->
+          <div class="upload-item" id="uploadWrap_contract">
+            <span class="upload-label">전속운송계약서 <span class="required">*</span></span>
+            <label class="upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              파일 선택
+              <input type="file" id="file_contract" accept="image/*,.pdf" onchange="handleUpload(this, 'contract')">
+            </label>
+            <div class="upload-status" id="status_contract"></div>
+          </div>
+
+          <!-- 자동차등록증 -->
+          <div class="upload-item" id="uploadWrap_vehicle">
+            <span class="upload-label">자동차등록증 <span class="required">*</span></span>
+            <label class="upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              파일 선택
+              <input type="file" id="file_vehicle" accept="image/*,.pdf" onchange="handleUpload(this, 'vehicle')">
+            </label>
+            <div class="upload-status" id="status_vehicle"></div>
+          </div>
+
+          <!-- 화물운송종사자격증 -->
+          <div class="upload-item" id="uploadWrap_cert">
+            <span class="upload-label">화물운송종사자격증 <span class="required">*</span></span>
+            <label class="upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              파일 선택
+              <input type="file" id="file_cert" accept="image/*,.pdf" onchange="handleUpload(this, 'cert')">
+            </label>
+            <div class="upload-status" id="status_cert"></div>
+          </div>
+
+        </div>
+
+        <!-- OCR 결과 패널 -->
+        <div class="ocr-panel" id="ocrPanel">
+          <div class="ocr-panel-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            OCR 자동 검증 결과
+          </div>
+          <div id="ocrResults"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑦ 개인정보 동의 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-title">개인정보 수집 · 이용 동의</div>
+      </div>
+      <div class="section-body">
+
+        <!-- 동의 1 -->
+        <div class="privacy-box">
+          <div class="privacy-header">① 개인정보 수집 및 이용 동의 (필수)</div>
+          <div class="privacy-content">
+            <strong>수집 항목:</strong> 성명, 주민등록번호, 주소, 연락처, 차량번호, 운전면허번호, 화물운송종사자격번호<br>
+            <strong>수집 목적:</strong> 택배용 화물자동차 운송사업 허가 신청 및 관련 행정처리<br>
+            <strong>보유 기간:</strong> 허가 관련 업무 종료 후 5년<br>
+            <strong>제3자 제공:</strong> 관련 행정기관(국토교통부, 지방자치단체) 및 허가 심사 기관<br><br>
+            귀하는 개인정보 수집 및 이용에 동의하지 않을 권리가 있습니다. 단, 동의를 거부하실 경우 허가 신청이 불가합니다.
+          </div>
+          <div class="privacy-footer">
+            <div class="privacy-agree">
+              <input type="checkbox" id="privacyAgree1">
+              <label for="privacyAgree1">위 개인정보 수집 및 이용에 <strong>동의합니다</strong></label>
+            </div>
+            <div class="signature-wrap">
+              <div class="signature-label">서명 (마우스 또는 터치로 서명)</div>
+              <div class="signature-pad-wrap">
+                <canvas id="sigCanvas1"></canvas>
+                <button class="signature-clear" onclick="clearSig(1)">지우기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 동의 2 -->
+        <div class="privacy-box">
+          <div class="privacy-header">② 고유식별정보(주민등록번호) 처리 동의 (필수)</div>
+          <div class="privacy-content">
+            <strong>처리 항목:</strong> 주민등록번호 (앞 6자리 + 뒤 7자리 전체)<br>
+            <strong>처리 목적:</strong> 본인 확인 및 운전면허·자격증 진위 검증, 중복 신청 방지<br>
+            <strong>보유 기간:</strong> 허가 관련 업무 종료 후 5년 (개인정보보호법 제24조에 의거)<br>
+            <strong>처리 근거:</strong> 화물자동차 운수사업법 시행규칙 제4조<br><br>
+            고유식별정보 처리에 동의하지 않을 경우 허가 신청이 제한됩니다. 해당 정보는 법령에서 정한 목적 외로 활용되지 않습니다.
+          </div>
+          <div class="privacy-footer">
+            <div class="privacy-agree">
+              <input type="checkbox" id="privacyAgree2">
+              <label for="privacyAgree2">위 고유식별정보 처리에 <strong>동의합니다</strong></label>
+            </div>
+            <div class="signature-wrap">
+              <div class="signature-label">서명 (마우스 또는 터치로 서명)</div>
+              <div class="signature-pad-wrap">
+                <canvas id="sigCanvas2"></canvas>
+                <button class="signature-clear" onclick="clearSig(2)">지우기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 구글 시트 미리보기 -->
+    <div class="sheets-preview" id="sheetsPreview">
+      <div class="sheets-preview-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        Google Sheets 기록 예시 (제출 시 자동 저장될 내용)
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="sheets-table" id="sheetsTable">
+          <thead>
+            <tr id="sheetsHeader"></tr>
+          </thead>
+          <tbody>
+            <tr id="sheetsRow"></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 제출 버튼 -->
+    <div class="submit-area">
+      <p style="font-size:12px; color:var(--ink-light); margin-bottom:16px;">
+        ※ 제출 전 모든 필수 항목(*) 입력 및 개인정보 동의 여부를 확인해 주세요.
+      </p>
+      <button class="submit-btn" onclick="handleSubmit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        신청서 제출
+      </button>
+    </div>
+
+  </div><!-- /doc-body -->
+</div><!-- /form-wrapper -->
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 서명 패드 초기화 ──
+let sigPads = {};
+function initSigPad(n) {
+  const canvas = document.getElementById('sigCanvas' + n);
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth * window.devicePixelRatio || 400;
+  canvas.height = 80 * window.devicePixelRatio || 160;
+  canvas.style.height = '80px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  sigPads[n] = new SignaturePad(canvas, { penColor: '#1a1a2e', minWidth: 1, maxWidth: 2.5 });
+}
+function clearSig(n) { sigPads[n] && sigPads[n].clear(); }
+
+window.addEventListener('load', () => {
+  initSigPad(1);
+  initSigPad(2);
+  setupProgressTracking();
+
+
+});
+
+// ── 토스트 알림 ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── 파일 저장소 ──
+const uploadedFiles = {};
+
+// ── 파일 업로드 + OCR ──
+async function handleUpload(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const wrap = document.getElementById('uploadWrap_' + type);
+  const status = document.getElementById('status_' + type);
+
+  wrap.classList.add('has-file');
+  uploadedFiles[type] = file;
+
+  status.innerHTML = `<span class="status-filename">✓ ${file.name}</span>
+    <span class="status-ocr checking"><span class="spinner"></span> OCR 분석 중...</span>`;
+
+  try {
+    const base64 = await toBase64(file);
+    const result = await runOCR(base64, file.type, type);
+    displayOCRResult(type, result, status);
+  } catch (e) {
+    status.innerHTML = `<span class="status-filename">✓ ${file.name}</span>
+      <span class="status-ocr mismatch">⚠ OCR 처리 중 오류: ${e.message}</span>`;
+  }
+
+  updateProgress();
+}
+
+function toBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// Gemini API로 OCR 수행
+async function runOCR(base64, mimeType, docType) {
+  const prompts = {
+    license: `이 운전면허증 이미지에서 다음 정보를 추출해 JSON으로만 응답하세요 (다른 텍스트 없이): {"name":"성명","licenseNo":"면허번호","address":"주소","rrn":"주민등록번호앞6자리"}`,
+    contract: `이 계약서에서 다음 정보를 추출해 JSON으로만 응답하세요: {"contractStart":"계약시작일(YYYY-MM-DD)","contractEnd":"계약종료일(YYYY-MM-DD)","name":"성명"}`,
+    vehicle: `이 자동차등록증에서 다음 정보를 추출해 JSON으로만 응답하세요: {"vehicleNo":"차량번호","vehicleType":"차종","vehicleModel":"차명(연식)","maxLoad":"최대적재량(숫자만)"}`,
+    cert: `이 화물운송종사자격증에서 다음 정보를 추출해 JSON으로만 응답하세요: {"name":"성명","certNo":"자격증번호","certDate":"취득일(YYYY-MM-DD)","rrn":"주민등록번호앞6자리"}`
+  };
+
+  // Gemini 1.5 Flash API (무료 티어)
+  const GEMINI_KEY = 'AIzaSyBrEFQ_NF2zp5qRCJC0tKymj_Ng-MxoItQ'; // ← 여기에 발급받은 API 키 입력
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`;
+
+  const isPdf = mimeType === 'application/pdf';
+  const part = isPdf
+    ? { inline_data: { mime_type: mimeType, data: base64 } }
+    : { inline_data: { mime_type: mimeType, data: base64 } };
+
+  const body = {
+    contents: [{
+      parts: [
+        part,
+        { text: prompts[docType] }
+      ]
+    }]
+  };
+
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+if (!resp.ok) {
+    if (resp.status === 400 || resp.status === 403) {
+      return getDemoOCR(docType);
+    }
+    const errBody = await resp.json().catch(() => ({}));
+    const errMsg = errBody?.error?.message || '알 수 없는 오류';
+    throw new Error(`API 오류 ${resp.status}: ${errMsg}`);
+  }
+
+  const data = await resp.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  const clean = text.replace(/```json|```/g, '').trim();
+  return JSON.parse(clean);
+}
+
+// API 키 미설정 시 데모 OCR 결과
+function getDemoOCR(docType) {
+  const demos = {
+    license: { name: document.getElementById('name').value || '홍길동', licenseNo: document.getElementById('licenseNo').value || '12-34-567890-12', address: document.getElementById('address').value || '서울시 강남구' },
+    contract: { contractStart: document.getElementById('contractStart').value, contractEnd: document.getElementById('contractEnd').value, name: document.getElementById('agencyRepName').value },
+    vehicle: { vehicleNo: document.getElementById('vehicleNo').value || '12가3456', vehicleType: document.getElementById('vehicleType').value, maxLoad: document.getElementById('maxLoad').value },
+    cert: { name: document.getElementById('certName').value || document.getElementById('name').value, certNo: document.getElementById('certNo').value, certDate: document.getElementById('certDate').value }
+  };
+  return demos[docType];
+}
+
+// OCR 결과 표시 및 입력값 비교
+function displayOCRResult(docType, ocr, statusEl) {
+  const fname = uploadedFiles[docType]?.name || '';
+  const comparisons = {
+    license: [
+      { key: '성명', ocrVal: ocr.name, inputId: 'name' },
+      { key: '면허번호', ocrVal: ocr.licenseNo, inputId: 'licenseNo' },
+    ],
+    contract: [
+      { key: '계약시작일', ocrVal: ocr.contractStart, inputId: 'contractStart' },
+    ],
+    vehicle: [
+      { key: '차량번호', ocrVal: ocr.vehicleNo, inputId: 'vehicleNo' },
+      { key: '최대적재량', ocrVal: ocr.maxLoad, inputId: 'maxLoad' },
+    ],
+    cert: [
+      { key: '자격증 성명', ocrVal: ocr.name, inputId: 'certName' },
+      { key: '자격증 번호', ocrVal: ocr.certNo, inputId: 'certNo' },
+    ]
+  };
+
+  const checks = comparisons[docType] || [];
+  let allMatch = true;
+  let html = `<span class="status-filename">✓ ${fname}</span>`;
+
+ checks.forEach(({ key, ocrVal, inputId }) => {
+    if (!ocrVal) return;
+    const inputEl = document.getElementById(inputId);
+    const inputVal = inputEl ? inputEl.value.trim() : '';
+
+    // 입력값이 비어있으면 → 미입력으로 처리
+    if (!inputVal) {
+      allMatch = false;
+      inputEl && inputEl.classList.remove('verified');
+      inputEl && inputEl.classList.remove('mismatch');
+      return;
+    }
+
+    const match = ocrVal.replace(/[\s\-]/g, '').toLowerCase() === inputVal.replace(/[\s\-]/g, '').toLowerCase();
+    if (!match) {
+      allMatch = false;
+      inputEl && inputEl.classList.add('mismatch');
+      inputEl && inputEl.classList.remove('verified');
+    } else {
+      inputEl && inputEl.classList.remove('mismatch');
+      inputEl && inputEl.classList.add('verified');
+    }
+  });
+
+  if (allMatch) {
+    html += `<span class="status-ocr match">✅ OCR 검증 완료 — 입력값 일치</span>`;
+  } else {
+    html += `<span class="status-ocr mismatch">⚠️ OCR 검증 — 일부 항목 불일치 (빨간 테두리 확인)</span>`;
+  }
+
+  statusEl.innerHTML = html;
+
+  // 전체 OCR 패널 업데이트
+  updateOCRPanel(docType, ocr, comparisons[docType]);
+}
+
+const allOCRData = {};
+function updateOCRPanel(docType, ocr, checks) {
+  allOCRData[docType] = { ocr, checks };
+  const panel = document.getElementById('ocrPanel');
+  const results = document.getElementById('ocrResults');
+  panel.classList.add('visible');
+
+  let html = '';
+  Object.entries(allOCRData).forEach(([dt, { ocr: o, checks: c }]) => {
+    const labels = { license: '운전면허증', contract: '전속운송계약서', vehicle: '자동차등록증', cert: '화물운송종사자격증' };
+    html += `<div style="font-weight:700; font-size:11px; color:var(--ink-light); margin:8px 0 4px;">[${labels[dt]}]</div>`;
+    (c || []).forEach(({ key, ocrVal, inputId }) => {
+      if (!ocrVal) return;
+      const inputVal = document.getElementById(inputId)?.value?.trim() || '';
+      const match = ocrVal.replace(/[\s\-]/g, '').toLowerCase() === inputVal.replace(/[\s\-]/g, '').toLowerCase();
+      const badge = inputVal ? (match ? '<span class="ocr-badge ok">일치</span>' : '<span class="ocr-badge ng">불일치</span>') : '';
+      html += `<div class="ocr-result-row"><span class="ocr-key">${key}</span><span class="ocr-val">${ocrVal}</span>${badge}</div>`;
+    });
+  });
+  results.innerHTML = html;
+}
+
+// ── 진행률 ──
+function setupProgressTracking() {
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', updateProgress);
+    el.addEventListener('change', updateProgress);
+  });
+}
+
+function updateProgress() {
+  const required = document.querySelectorAll('[data-required="true"]');
+  let filled = 0;
+  required.forEach(el => { if (el.value.trim()) filled++; });
+
+  const fileCount = Object.keys(uploadedFiles).length;
+  const agree1 = document.getElementById('privacyAgree1').checked ? 1 : 0;
+  const agree2 = document.getElementById('privacyAgree2').checked ? 1 : 0;
+
+  const total = required.length + 4 + 2; // 필드 + 파일4개 + 동의2개
+  const done = filled + fileCount + agree1 + agree2;
+  const pct = Math.round(Math.min(done / total * 100, 100));
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+
+  // 시트 미리보기 업데이트
+  if (pct > 20) updateSheetsPreview();
+}
+
+// ── Google Sheets 미리보기 ──
+function updateSheetsPreview() {
+  const preview = document.getElementById('sheetsPreview');
+  const header = document.getElementById('sheetsHeader');
+  const row = document.getElementById('sheetsRow');
+  preview.classList.add('visible');
+
+  const cols = [
+    ['제출일시', new Date().toLocaleString('ko-KR')],
+    ['성명', document.getElementById('name').value],
+    ['주민등록번호', document.getElementById('rrn1').value ? document.getElementById('rrn1').value + '-' + '●'.repeat(7) : ''],
+    ['주소', document.getElementById('address').value],
+    ['연락처', document.getElementById('phone').value],
+    ['차량번호', document.getElementById('vehicleNo').value],
+    ['택배사업자명', document.getElementById('companyName').value],
+    ['대리점명', document.getElementById('agencyName').value],
+    ['계약기간', (document.getElementById('contractStart').value || '') + ' ~ ' + (document.getElementById('contractEnd').value || '')],
+    ['면허번호', document.getElementById('licenseNo').value],
+    ['자격증번호', document.getElementById('certNo').value],
+    ['운전면허증', uploadedFiles.license ? '[Drive 링크]' : ''],
+    ['전속운송계약서', uploadedFiles.contract ? '[Drive 링크]' : ''],
+    ['자동차등록증', uploadedFiles.vehicle ? '[Drive 링크]' : ''],
+    ['화물운송종사자격증', uploadedFiles.cert ? '[Drive 링크]' : ''],
+  ];
+
+  header.innerHTML = cols.map(([k]) => `<th>${k}</th>`).join('');
+  row.innerHTML = cols.map(([, v]) => `<td>${v || ''}</td>`).join('');
+}
+
+// ──────────────────────────────────────────
+// ★ Apps Script 웹앱 URL (배포 후 여기에 입력)
+// ──────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbym62H7vDHmui0kgblPoekuDuPFGaC68zeEUubXx2N9U2zIZIq_6619gXNWGDAaNRdl3A/exec';
+
+// ── 파일 → Base64 변환 헬퍼 ──
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ── 제출 처리 (Apps Script 연동) ──
+async function handleSubmit() {
+  // 1. 필수 필드 유효성 검사
+  const missing = [];
+  document.querySelectorAll('[data-required="true"]').forEach(el => {
+    if (!el.value.trim()) {
+      const label = el.closest('.field-group')?.querySelector('label');
+      if (label) missing.push(label.textContent.replace('*','').trim());
+      el.style.borderColor = 'var(--error)';
+    } else {
+      el.style.borderColor = '';
+    }
+  });
+
+  if (missing.length > 0) {
+    showToast('⚠ 필수 항목을 입력해주세요: ' + missing.slice(0,3).join(', ') + (missing.length > 3 ? ' 외' : ''), 'error');
+    document.querySelector('[data-required="true"]:placeholder-shown, [style*="error"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  if (!document.getElementById('privacyAgree1').checked || !document.getElementById('privacyAgree2').checked) {
+    showToast('⚠ 개인정보 동의를 모두 체크해주세요.', 'error');
+    return;
+  }
+
+  if (sigPads[1]?.isEmpty() || sigPads[2]?.isEmpty()) {
+    showToast('⚠ 두 동의서 모두 서명해주세요.', 'error');
+    return;
+  }
+
+  // 2. 버튼 비활성화 + 로딩 상태
+  const btn = document.querySelector('.submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:white;"></span> 제출 중...';
+
+  try {
+    // 3. 파일 → Base64 변환
+    const fileEntries = {};
+    for (const [key, file] of Object.entries(uploadedFiles)) {
+      fileEntries[key] = {
+        data: await fileToBase64(file),
+        name: file.name,
+        type: file.type,
+      };
+    }
+
+    // 4. 서명 이미지 추출
+    const sig1 = sigPads[1]?.isEmpty() ? '' : sigPads[1].toDataURL('image/png');
+    const sig2 = sigPads[2]?.isEmpty() ? '' : sigPads[2].toDataURL('image/png');
+
+    // 5. 체크박스 값 수집
+    const vehicleShape = [...document.querySelectorAll('input[name="vehicleShape"]:checked')].map(c => c.value).join(', ');
+    const licenseType  = [...document.querySelectorAll('input[name="licenseType"]:checked')].map(c => c.value).join(', ');
+
+    // 6. 전송 payload 구성
+    // Apps Script는 URLSearchParams(application/x-www-form-urlencoded) 방식으로 수신
+    const params = new URLSearchParams();
+    const fields = {
+      name:           document.getElementById('name').value,
+      rrn1:           document.getElementById('rrn1').value,
+      // rrn2는 보안상 전송하지 않음 (서버 저장 없음)
+      address:        document.getElementById('address').value,
+      phone:          document.getElementById('phone').value,
+      mobile:         document.getElementById('mobile').value,
+      email:          document.getElementById('email').value,
+      companyName:    document.getElementById('companyName').value,
+      agencyName:     document.getElementById('agencyName').value,
+      agencyRepName:  document.getElementById('agencyRepName').value,
+      agencyAddress:  document.getElementById('agencyAddress').value,
+      agencyPhone:    document.getElementById('agencyPhone').value,
+      contractStart:  document.getElementById('contractStart').value,
+      contractEnd:    document.getElementById('contractEnd').value,
+      vehicleNo:      document.getElementById('vehicleNo').value,
+      vehicleType:    document.getElementById('vehicleType').value,
+      vehicleModel:   document.getElementById('vehicleModel').value,
+      maxLoad:        document.getElementById('maxLoad').value,
+      vehicleShape,
+      licenseNo:      document.getElementById('licenseNo').value,
+      licenseType,
+      certNo:         document.getElementById('certNo').value,
+      certDate:       document.getElementById('certDate').value,
+      certName:       document.getElementById('certName').value,
+      certRrn1:       document.getElementById('certRrn1').value,
+      certAddress:    document.getElementById('certAddress').value,
+      certPhone:      document.getElementById('certPhone').value,
+      certMobile:     document.getElementById('certMobile').value,
+      privacyAgree1:  document.getElementById('privacyAgree1').checked ? '동의' : '미동의',
+      privacyAgree2:  document.getElementById('privacyAgree2').checked ? '동의' : '미동의',
+      signature1:     sig1,
+      signature2:     sig2,
+    };
+
+    // 파일 Base64 포함
+    ['license','contract','vehicle','cert'].forEach(k => {
+      if (fileEntries[k]) {
+        params.append('file_' + k,        fileEntries[k].data);
+        params.append('file_' + k + '_name', fileEntries[k].name);
+        params.append('file_' + k + '_type', fileEntries[k].type);
+      }
+    });
+
+    Object.entries(fields).forEach(([k, v]) => params.append(k, v || ''));
+
+    // 7. Apps Script로 POST
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    });
+
+    const result = await resp.json();
+
+    if (result.status === 'success') {
+      showToast('✅ ' + result.message, 'success');
+      btn.innerHTML = '✅ 제출 완료';
+      btn.style.background = 'var(--success)';
+      // 제출 완료 후 폼 잠금
+      document.querySelectorAll('input, select, button:not(.submit-btn)').forEach(el => el.disabled = true);
+      // 완료 배너 표시 (PDF 링크 포함)
+      showCompletionBanner(result);
+      // PDF 링크 버튼 표시
+      if (result.pdfLink && result.pdfLink.startsWith('http')) {
+        const pdfBtn = document.createElement('a');
+        pdfBtn.href = result.pdfLink;
+        pdfBtn.target = '_blank';
+        pdfBtn.style.cssText = `
+          display:inline-flex; align-items:center; gap:8px; margin-top:12px;
+          background:white; color:#2d6a4f; border:2px solid #52b788;
+          padding:10px 24px; border-radius:3px; text-decoration:none;
+          font-family:'Noto Serif KR',serif; font-size:13px; font-weight:700;
+          transition:all 0.2s;
+        `;
+        pdfBtn.innerHTML = '📄 완성된 확인서 PDF 다운로드';
+        pdfBtn.onmouseover = () => { pdfBtn.style.background='#d8f3dc'; };
+        pdfBtn.onmouseout  = () => { pdfBtn.style.background='white'; };
+        document.getElementById('completionBanner').appendChild(pdfBtn);
+      }
+    } else {
+      throw new Error(result.message || '서버 오류');
+    }
+
+  } catch (err) {
+    console.error('제출 오류:', err);
+
+    // Apps Script URL 미설정 시 안내
+    if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL') {
+      showToast('ℹ Apps Script URL을 설정해야 실제 제출됩니다. (개발 모드)', 'info');
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 신청서 제출';
+      showCompletionBanner({ message: '(테스트) 데이터가 입력 완료 상태입니다.' });
+    } else {
+      showToast('❌ 제출 실패: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 다시 시도';
+    }
+  }
+}
+
+// ── 제출 완료 배너 ──
+function showCompletionBanner(result) {
+  const existing = document.getElementById('completionBanner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'completionBanner';
+  banner.style.cssText = `
+    background: linear-gradient(135deg, #2d6a4f, #1b4332);
+    color: white; padding: 24px 32px; margin: 0 0 0;
+    text-align: center; border-top: 3px solid #52b788;
+  `;
+  banner.innerHTML = `
+    <div style="font-size:28px; margin-bottom:8px;">✅</div>
+    <div style="font-family:'Noto Serif KR',serif; font-size:16px; font-weight:700; margin-bottom:6px;">신청서가 성공적으로 제출되었습니다</div>
+    <div style="font-size:12px; opacity:0.85;">${result.message || ''}</div>
+    ${result.rowNumber ? `<div style="font-size:11px; margin-top:8px; opacity:0.7;">접수 번호: #${result.rowNumber} · ${result.timestamp || ''}</div>` : ''}
+  `;
+
+  const submitArea = document.querySelector('.submit-area');
+  submitArea.parentNode.insertBefore(banner, submitArea);
+  banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// 체크박스 단일 선택 (차량형태)
+document.querySelectorAll('input[name="vehicleShape"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    document.querySelectorAll('input[name="vehicleShape"]').forEach(o => {
+      if (o !== cb) o.checked = false;
+    });
+    updateProgress();
+  });
+});
+
+// 체크박스 단일 선택 (면허종류)
+document.querySelectorAll('input[name="licenseType"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    document.querySelectorAll('input[name="licenseType"]').forEach(o => {
+      if (o !== cb) o.checked = false;
+    });
+    updateProgress();
+  });
+});
+
+// 개인정보 동의 체크 시 진행률 업데이트
+document.getElementById('privacyAgree1').addEventListener('change', updateProgress);
+document.getElementById('privacyAgree2').addEventListener('change', updateProgress);
+
+
+function searchAddress(target) {
+  openPostcode(target);
+}
+
+function openPostcode(target) {function openPostcode(target) {
+  const width = 500, height = 600;
+  const left = (window.screen.width / 2) - (width / 2);
+  const top  = (window.screen.height / 2) - (height / 2);
+
+  new daum.Postcode({
+    oncomplete: function(data) {
+      const addr = data.roadAddress || data.jibunAddress;
+      if (target === 'main') {
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById('address').value = addr;
+        document.getElementById('addressDetail').focus();
+      } else if (target === 'agency') {
+        document.getElementById('agencyPostcode').value = data.zonecode;
+        document.getElementById('agencyAddress').value = addr;
+        document.getElementById('agencyAddressDetail').focus();
+      }
+      updateProgress();
+    },
+    width, height,
+  }).open({ left, top });
+}
+  // 기존 레이어 있으면 제거
+  const existing = document.getElementById('daumPostcodeLayer');
+  if (existing) existing.remove();
+
+  // 레이어 생성
+  const layer = document.createElement('div');
+  layer.id = 'daumPostcodeLayer';
+  layer.style.cssText = `
+    position:fixed; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:100%; max-width:500px; height:500px;
+    border:2px solid #a09070; border-radius:8px;
+    background:white; z-index:9999;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  `;
+
+  // 닫기 버튼
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ 닫기';
+  closeBtn.style.cssText = `
+    position:absolute; top:8px; right:8px;
+    background:#8b1a1a; color:white; border:none;
+    padding:4px 12px; border-radius:4px; cursor:pointer;
+    font-size:12px; z-index:10000;
+  `;
+  closeBtn.onclick = () => layer.remove();
+  layer.appendChild(closeBtn);
+
+  // 주소 검색 컨테이너
+  const container = document.createElement('div');
+  container.style.cssText = 'width:100%; height:100%; padding-top:36px;';
+  layer.appendChild(container);
+
+  document.body.appendChild(layer);
+
+  new daum.Postcode({
+    oncomplete: function(data) {
+      const addr = data.roadAddress || data.jibunAddress;
+      if (target === 'main') {
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById('address').value = addr;
+        document.getElementById('addressDetail').focus();
+      } else if (target === 'agency') {
+        document.getElementById('agencyPostcode').value = data.zonecode;
+        document.getElementById('agencyAddress').value = addr;
+        document.getElementById('agencyAddressDetail').focus();
+      }
+      layer.remove();
+      updateProgress();
+    },
+    width: '100%',
+    height: '100%',
+  }).embed(container);
+}
+</script>
+</body>
+</html>
