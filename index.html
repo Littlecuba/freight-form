@@ -861,7 +861,91 @@ window.addEventListener('load', () => {
   document.getElementById('agencyRepName').addEventListener('input', function() {
     document.getElementById('ceoName').value = this.value;
   });
+
+  // ── 개발 모드: 더미데이터 자동 채우기 ──
+  // ⚠️ 테스트 완료 후 아래 fillDummyData() 호출 줄을 삭제하세요
+  fillDummyData();
 });
+
+function fillDummyData() {
+  const d = {
+    name:           '홍길동',
+    rrn1:           '800101',
+    rrn2:           '1234567',
+    postcode:       '06236',
+    address:        '서울특별시 강남구 테헤란로 123',
+    addressDetail:  '101호',
+    phone:          '010-1234-5678',
+    mobile:         '010-1234-5678',
+    companyName:    '(주)컬리넥스트마일',
+    agencyName:     '강남대리점',
+    agencyRepName:  '김대표',
+    agencyPostcode: '06100',
+    agencyAddress:  '서울특별시 강남구 역삼동 456',
+    agencyAddressDetail: '2층',
+    agencyPhone:    '02-555-6789',
+    contractYears:  '1',
+    contractStart:  '2026-01-01',
+    contractEnd:    '2026-12-31',
+    vehicleType:    '화물차',
+    vehicleModel:   '포터2',
+    maxLoad:        '1000',
+    licenseNo:      '12-34-567890-12',
+    certNo:         'FR-2024-12345',
+    certDate:       '2020-03-15',
+  };
+
+  // 텍스트 필드 채우기
+  Object.entries(d).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.value = val;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+
+  // 차량 형태 체크박스
+  const tapChk = document.querySelector('input[name="vehicleShape"][value="탑형"]');
+  if (tapChk) { tapChk.checked = true; tapChk.dispatchEvent(new Event('change', { bubbles: true })); }
+
+  // 면허 종류 체크박스
+  const licChk = document.querySelector('input[name="licenseType"][value="1종 보통"]');
+  if (licChk) { licChk.checked = true; licChk.dispatchEvent(new Event('change', { bubbles: true })); }
+
+  // 서명 자동 그리기 (간단한 선)
+  [1, 2, 3, 4].forEach(n => {
+    const pad = sigPads[n];
+    if (!pad) return;
+    pad.clear();
+    const canvas = document.getElementById('sigCanvas' + n);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(10, canvas.height / 2);
+    ctx.lineTo(canvas.width - 10, canvas.height / 2);
+    ctx.stroke();
+    // SignaturePad에 수동으로 포인트 추가 (isEmpty() false 처리)
+    pad._data = [[{ x: 10, y: canvas.height/2, pressure: 0.5, time: Date.now() },
+                  { x: canvas.width-10, y: canvas.height/2, pressure: 0.5, time: Date.now()+100 }]];
+  });
+
+  // 개인정보 동의 체크
+  ['privacyAgree1', 'privacyAgree2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.checked = true; el.dispatchEvent(new Event('change', { bubbles: true })); }
+  });
+
+  // 하단 서명란 이름 연동
+  document.getElementById('applicantName').value = d.name;
+  document.getElementById('companyNameSign').value = d.companyName;
+  document.getElementById('ceoName').value = d.agencyRepName;
+
+  updateProgress();
+  console.log('✅ 더미데이터 채우기 완료');
+}
 
 // ── 토스트 ──
 function showToast(msg, type = '') {
