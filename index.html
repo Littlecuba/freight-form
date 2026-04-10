@@ -114,6 +114,29 @@ input[readonly] {
 input.verified { border-bottom: 1.5px solid #1a7a3c; background: #f0fff4; }
 input.mismatch { border-bottom: 1.5px solid #c0392b; background: #fff5f5; }
 
+/* OCR 자동 채워진 필드 */
+input.auto-filled {
+  border-bottom: 1.5px solid #5F0080;
+  background: #f3e8ff;
+  animation: fillPulse 0.6s ease;
+}
+@keyframes fillPulse {
+  0%   { background: #e0c8ff; }
+  100% { background: #f3e8ff; }
+}
+.auto-filled-badge {
+  display: inline-block;
+  font-size: 9px;
+  color: #5F0080;
+  background: #f3e8ff;
+  border: 1px solid #d4b8ff;
+  border-radius: 8px;
+  padding: 0 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
 /* 체크박스 */
 .cb-group {
   display: flex;
@@ -311,10 +334,14 @@ input.mismatch { border-bottom: 1.5px solid #c0392b; background: #fff5f5; }
 .ocr-badge.ok  { background: #d4edda; color: #1a7a3c; }
 .ocr-badge.ng  { background: #f8d7da; color: #c0392b; }
 
-/* 파일 업로드 */
+/* 파일 업로드 (상단 배치) */
 .upload-section {
-  padding: 10px 12px;
-  border-top: 1px solid #ddd;
+  padding: 12px 12px;
+  border-bottom: 2px solid #5F0080;
+  background: #faf7ff;
+}
+.upload-section.top {
+  border-top: none;
 }
 .upload-title {
   font-size: 11px;
@@ -475,6 +502,61 @@ input.mismatch { border-bottom: 1.5px solid #c0392b; background: #fff5f5; }
 
   <!-- 제목 -->
   <div class="doc-title">택배용 화물자동차 운송사업 허가 신청 현황 확인서</div>
+
+  <!-- ★ 첨부서류 업로드 (최상단) -->
+  <div class="upload-section top">
+    <div class="upload-title">📎 STEP 1: 서류를 먼저 업로드하면 자동으로 양식이 채워집니다</div>
+    <div style="font-size:10px; color:#888; margin-bottom:8px;">운전면허증, 전속운송계약서, 자동차등록증, 화물운송종사자격증을 업로드해 주세요. AI가 자동으로 내용을 읽어 아래 양식에 채워드립니다.</div>
+    <div class="upload-grid">
+      <div class="upload-item" id="uploadWrap_license">
+        <span class="upload-lbl">운전면허증 <span style="color:#c0392b;">*</span></span>
+        <label class="upload-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          파일 선택
+          <input type="file" id="file_license" accept="image/*,.pdf" onchange="handleUpload(this,'license')">
+        </label>
+        <div class="upload-status" id="status_license"></div>
+      </div>
+      <div class="upload-item" id="uploadWrap_contract">
+        <span class="upload-lbl">전속운송계약서 <span style="color:#c0392b;">*</span></span>
+        <label class="upload-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          파일 선택
+          <input type="file" id="file_contract" accept="image/*,.pdf" onchange="handleUpload(this,'contract')">
+        </label>
+        <div class="upload-status" id="status_contract"></div>
+      </div>
+      <div class="upload-item" id="uploadWrap_vehicle">
+        <span class="upload-lbl">자동차등록증 <span style="color:#c0392b;">*</span></span>
+        <label class="upload-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          파일 선택
+          <input type="file" id="file_vehicle" accept="image/*,.pdf" onchange="handleUpload(this,'vehicle')">
+        </label>
+        <div class="upload-status" id="status_vehicle"></div>
+      </div>
+      <div class="upload-item" id="uploadWrap_cert">
+        <span class="upload-lbl">화물운송종사자격증 <span style="color:#c0392b;">*</span></span>
+        <label class="upload-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          파일 선택
+          <input type="file" id="file_cert" accept="image/*,.pdf" onchange="handleUpload(this,'cert')">
+        </label>
+        <div class="upload-status" id="status_cert"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OCR 자동 채우기 결과 패널 -->
+  <div class="ocr-panel" id="ocrPanel">
+    <div style="font-weight:700; color:#5F0080; margin-bottom:6px; font-size:11px;">🤖 AI 자동 인식 결과 <span style="font-weight:400; font-size:10px; color:#888;">(자동 채워진 항목을 확인하고 수정해 주세요)</span></div>
+    <div id="ocrResults"></div>
+  </div>
+
+  <!-- STEP 2 안내 -->
+  <div style="padding:8px 12px; background:#f8f0ff; font-size:11px; color:#5F0080; font-weight:600; border-bottom:1px solid #ddd;">
+    ✏️ STEP 2: 자동 입력된 내용을 확인하고, 빈 항목을 직접 채워주세요
+  </div>
 
   <!-- 메인 테이블 -->
   <table class="form-table">
@@ -664,55 +746,6 @@ input.mismatch { border-bottom: 1.5px solid #c0392b; background: #fff5f5; }
 
   </table>
 
-  <!-- 첨부서류 업로드 -->
-  <div class="upload-section">
-    <div class="upload-title">📎 첨부서류 업로드 (업로드 시 OCR 자동 검증)</div>
-    <div class="upload-grid">
-      <div class="upload-item" id="uploadWrap_license">
-        <span class="upload-lbl">운전면허증 <span style="color:#c0392b;">*</span></span>
-        <label class="upload-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          파일 선택
-          <input type="file" id="file_license" accept="image/*,.pdf" onchange="handleUpload(this,'license')">
-        </label>
-        <div class="upload-status" id="status_license"></div>
-      </div>
-      <div class="upload-item" id="uploadWrap_contract">
-        <span class="upload-lbl">전속운송계약서 <span style="color:#c0392b;">*</span></span>
-        <label class="upload-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          파일 선택
-          <input type="file" id="file_contract" accept="image/*,.pdf" onchange="handleUpload(this,'contract')">
-        </label>
-        <div class="upload-status" id="status_contract"></div>
-      </div>
-      <div class="upload-item" id="uploadWrap_vehicle">
-        <span class="upload-lbl">자동차등록증 <span style="color:#c0392b;">*</span></span>
-        <label class="upload-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          파일 선택
-          <input type="file" id="file_vehicle" accept="image/*,.pdf" onchange="handleUpload(this,'vehicle')">
-        </label>
-        <div class="upload-status" id="status_vehicle"></div>
-      </div>
-      <div class="upload-item" id="uploadWrap_cert">
-        <span class="upload-lbl">화물운송종사자격증 <span style="color:#c0392b;">*</span></span>
-        <label class="upload-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          파일 선택
-          <input type="file" id="file_cert" accept="image/*,.pdf" onchange="handleUpload(this,'cert')">
-        </label>
-        <div class="upload-status" id="status_cert"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- OCR 결과 패널 -->
-  <div class="ocr-panel" id="ocrPanel">
-    <div style="font-weight:700; color:#5F0080; margin-bottom:6px; font-size:11px;">🔍 OCR 자동 검증 결과</div>
-    <div id="ocrResults"></div>
-  </div>
-
   <!-- 제출 본문 -->
   <div class="submit-section">
     <p style="font-size:12px; line-height:1.7;">
@@ -864,7 +897,7 @@ window.addEventListener('load', () => {
 
   // ── 개발 모드: 더미데이터 자동 채우기 ──
   // ⚠️ 테스트 완료 후 아래 fillDummyData() 호출 줄을 삭제하세요
-  fillDummyData();
+  // fillDummyData();
 });
 
 function fillDummyData() {
@@ -970,8 +1003,8 @@ async function handleUpload(input, type) {
   try {
     const base64 = await toBase64(file);
     const result = await runOCR(base64, file.type, type);
-    if (result) displayOCRResult(type, result, status, file.name);
-    else status.innerHTML = `<span class="status-ok">✓ ${file.name}</span>`;
+    if (result) autoFillFromOCR(type, result, status, file.name);
+    else status.innerHTML = `<span class="status-ok">✓ ${file.name}</span> <span style="color:#888; font-size:10px;">OCR 인식 실패 (직접 입력해주세요)</span>`;
   } catch(e) {
     status.innerHTML = `<span class="status-ok">✓ ${file.name}</span> <span class="status-err">⚠ OCR 오류: ${e.message}</span>`;
   }
@@ -989,10 +1022,14 @@ function toBase64(file) {
 
 async function runOCR(base64, mimeType, docType) {
   const prompts = {
-    license:  '이 운전면허증에서 JSON으로만: {"name":"성명","licenseNo":"면허번호","rrn":"주민번호앞6자리"}',
-    contract: '이 계약서에서 JSON으로만: {"contractStart":"YYYY-MM-DD","contractEnd":"YYYY-MM-DD","name":"성명"}',
-    vehicle:  '이 자동차등록증에서 JSON으로만: {"vehicleNo":"차량번호","vehicleType":"차종","maxLoad":"최대적재량숫자"}',
-    cert:     '이 화물운송종사자격증에서 JSON으로만: {"name":"성명","certNo":"자격증번호","certDate":"YYYY-MM-DD"}'
+    license:  '이 운전면허증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
+              '{"name":"성명","rrn":"주민번호앞6자리숫자만","address":"주소전체","licenseNo":"면허번호(XX-XX-XXXXXX-XX형식)","licenseType":"면허종류(예:1종 보통)"}',
+    contract: '이 전속운송계약서 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
+              '{"companyName":"택배사업자명(위탁사)","agencyName":"대리점또는영업점명","agencyRepName":"대리점대표자성명","agencyAddress":"대리점주소전체","agencyPhone":"대리점연락처","contractYears":"계약기간년수숫자만","contractStart":"계약시작일YYYY-MM-DD","contractEnd":"계약종료일YYYY-MM-DD","name":"신청인(수탁인)성명"}',
+    vehicle:  '이 자동차등록증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
+              '{"vehicleNo":"차량번호","vehicleType":"차종(예:1톤 화물)","vehicleModel":"차명과연식(예:포터2(2020))","maxLoad":"최대적재량kg숫자만","vehicleShape":"차량형태(탑형 또는 밴형)","ownerName":"소유자성명","ownerAddress":"소유자주소"}',
+    cert:     '이 화물운송종사자격증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
+              '{"name":"성명","certNo":"자격증번호","certDate":"자격취득일YYYY-MM-DD","rrn":"주민번호앞6자리숫자만","address":"주소","phone":"연락처"}'
   };
   const url  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`;
   const body = { contents: [{ parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: prompts[docType] }] }] };
@@ -1007,41 +1044,152 @@ async function runOCR(base64, mimeType, docType) {
   return JSON.parse(text.replace(/```json|```/g, '').trim());
 }
 
-function displayOCRResult(docType, ocr, statusEl, fname) {
-  const map = {
-    license:  [{ key:'성명', val:ocr.name, id:'name' }, { key:'면허번호', val:ocr.licenseNo, id:'licenseNo' }],
-    contract: [{ key:'계약시작일', val:ocr.contractStart, id:'contractStart' }],
-    vehicle:  [{ key:'차량번호', val:ocr.vehicleNo, id:'vehicleNo' }, { key:'최대적재량', val:ocr.maxLoad, id:'maxLoad' }],
-    cert:     [{ key:'자격증번호', val:ocr.certNo, id:'certNo' }],
-  };
-  const checks = map[docType] || [];
-  let allMatch = true;
-  checks.forEach(({ val, id }) => {
-    if (!val) return;
-    const el = document.getElementById(id);
-    const inputVal = el?.value?.trim() || '';
-    if (!inputVal) { allMatch = false; return; }
-    const match = val.replace(/[\s\-]/g,'').toLowerCase() === inputVal.replace(/[\s\-]/g,'').toLowerCase();
-    if (!match) { allMatch = false; el?.classList.add('mismatch'); el?.classList.remove('verified'); }
-    else { el?.classList.add('verified'); el?.classList.remove('mismatch'); }
-  });
-  statusEl.innerHTML = `<span class="status-ok">✓ ${fname}</span> ${allMatch ? '<span class="status-ok">✅ 입력값 일치</span>' : '<span class="status-err">⚠ 불일치 항목 있음</span>'}`;
+// ── 필드에 값 채우기 헬퍼 (이미 값이 있으면 덮어쓰지 않음) ──
+function setFieldValue(id, value, forceOverwrite) {
+  if (!value || value.trim() === '') return false;
+  const el = document.getElementById(id);
+  if (!el) return false;
+  // 이미 사용자가 입력한 값이 있으면 건너뜀 (forceOverwrite가 아닌 경우)
+  if (el.value.trim() !== '' && !forceOverwrite) return false;
+  el.value = value.trim();
+  el.classList.add('auto-filled');
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+  return true;
+}
 
-  // OCR 패널 업데이트
+// ── 체크박스 자동 선택 헬퍼 ──
+function setCheckboxValue(name, value) {
+  if (!value || value.trim() === '') return false;
+  const val = value.trim();
+  const cbs = document.querySelectorAll(`input[name="${name}"]`);
+  let matched = false;
+  cbs.forEach(cb => {
+    if (val.includes(cb.value) || cb.value.includes(val)) {
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+      matched = true;
+    }
+  });
+  return matched;
+}
+
+// ── OCR 결과로 폼 자동 채우기 ──
+function autoFillFromOCR(docType, ocr, statusEl, fname) {
+  if (!ocr) return;
+
+  const filledFields = [];
+  const labels = { license:'운전면허증', contract:'전속운송계약서', vehicle:'자동차등록증', cert:'화물운송종사자격증' };
+
+  // 서류 유형별 매핑
+  if (docType === 'license') {
+    if (setFieldValue('name', ocr.name))        filledFields.push({ key:'성명', val:ocr.name });
+    if (setFieldValue('rrn1', ocr.rrn))          filledFields.push({ key:'주민번호(앞6)', val:ocr.rrn });
+    if (ocr.address) {
+      // 주소는 readonly이므로 직접 설정
+      const addrEl = document.getElementById('address');
+      if (addrEl && !addrEl.value.trim()) {
+        addrEl.value = ocr.address;
+        addrEl.classList.add('auto-filled');
+        filledFields.push({ key:'주소', val:ocr.address });
+      }
+    }
+    if (setFieldValue('licenseNo', ocr.licenseNo)) filledFields.push({ key:'면허번호', val:ocr.licenseNo });
+    if (setCheckboxValue('licenseType', ocr.licenseType)) filledFields.push({ key:'면허종류', val:ocr.licenseType });
+    // 연동 필드
+    if (ocr.name) setFieldValue('applicantName', ocr.name);
+  }
+
+  if (docType === 'contract') {
+    if (setFieldValue('companyName', ocr.companyName)) {
+      filledFields.push({ key:'택배사업자명', val:ocr.companyName });
+      setFieldValue('companyNameSign', ocr.companyName);
+    }
+    if (setFieldValue('agencyName', ocr.agencyName))       filledFields.push({ key:'대리점명', val:ocr.agencyName });
+    if (setFieldValue('agencyRepName', ocr.agencyRepName)) {
+      filledFields.push({ key:'대리점 대표자명', val:ocr.agencyRepName });
+      setFieldValue('ceoName', ocr.agencyRepName);
+    }
+    if (ocr.agencyAddress) {
+      const addrEl = document.getElementById('agencyAddress');
+      if (addrEl && !addrEl.value.trim()) {
+        addrEl.value = ocr.agencyAddress;
+        addrEl.classList.add('auto-filled');
+        filledFields.push({ key:'대리점 주소', val:ocr.agencyAddress });
+      }
+    }
+    if (setFieldValue('agencyPhone', ocr.agencyPhone))     filledFields.push({ key:'대리점 연락처', val:ocr.agencyPhone });
+    if (setFieldValue('contractYears', ocr.contractYears))  filledFields.push({ key:'계약기간(년)', val:ocr.contractYears + '년' });
+    if (setFieldValue('contractStart', ocr.contractStart))  filledFields.push({ key:'계약시작일', val:ocr.contractStart });
+    if (setFieldValue('contractEnd', ocr.contractEnd))      filledFields.push({ key:'계약종료일', val:ocr.contractEnd });
+    if (ocr.name) {
+      setFieldValue('name', ocr.name);
+      setFieldValue('applicantName', ocr.name);
+    }
+  }
+
+  if (docType === 'vehicle') {
+    if (setFieldValue('vehicleType', ocr.vehicleType))   filledFields.push({ key:'차종', val:ocr.vehicleType });
+    if (setFieldValue('vehicleModel', ocr.vehicleModel)) filledFields.push({ key:'차명(연식)', val:ocr.vehicleModel });
+    if (setFieldValue('maxLoad', ocr.maxLoad))            filledFields.push({ key:'최대적재량', val:ocr.maxLoad + 'kg' });
+    if (setCheckboxValue('vehicleShape', ocr.vehicleShape)) filledFields.push({ key:'차량형태', val:ocr.vehicleShape });
+    // 소유자 정보로 성명/주소 보조 채우기
+    if (ocr.ownerName) setFieldValue('name', ocr.ownerName);
+    if (ocr.ownerAddress) {
+      const addrEl = document.getElementById('address');
+      if (addrEl && !addrEl.value.trim()) {
+        addrEl.value = ocr.ownerAddress;
+        addrEl.classList.add('auto-filled');
+      }
+    }
+  }
+
+  if (docType === 'cert') {
+    if (setFieldValue('certNo', ocr.certNo))     filledFields.push({ key:'자격증번호', val:ocr.certNo });
+    if (setFieldValue('certDate', ocr.certDate))  filledFields.push({ key:'자격취득일', val:ocr.certDate });
+    if (ocr.name) {
+      setFieldValue('name', ocr.name);
+      setFieldValue('applicantName', ocr.name);
+      filledFields.push({ key:'성명', val:ocr.name });
+    }
+    if (ocr.rrn) setFieldValue('rrn1', ocr.rrn);
+    if (ocr.phone) {
+      setFieldValue('phone', ocr.phone);
+      setFieldValue('mobile', ocr.phone);
+    }
+    if (ocr.address) {
+      const addrEl = document.getElementById('address');
+      if (addrEl && !addrEl.value.trim()) {
+        addrEl.value = ocr.address;
+        addrEl.classList.add('auto-filled');
+      }
+    }
+  }
+
+  // 상태 메시지 업데이트
+  const cnt = filledFields.length;
+  statusEl.innerHTML = cnt > 0
+    ? `<span class="status-ok">✓ ${fname}</span> <span class="status-ok">✅ ${cnt}개 항목 자동 입력 완료</span>`
+    : `<span class="status-ok">✓ ${fname}</span> <span style="color:#888; font-size:10px;">인식된 항목 없음 (직접 입력해주세요)</span>`;
+
+  // OCR 패널에 결과 추가
   const panel = document.getElementById('ocrPanel');
   const results = document.getElementById('ocrResults');
   panel.classList.add('visible');
-  const labels = { license:'운전면허증', contract:'전속운송계약서', vehicle:'자동차등록증', cert:'화물운송종사자격증' };
-  const existing = results.innerHTML;
-  let html = existing + `<div style="font-weight:700;font-size:10px;color:#888;margin:4px 0 2px;">[${labels[docType]}]</div>`;
-  checks.forEach(({ key, val, id }) => {
-    if (!val) return;
-    const inputVal = document.getElementById(id)?.value?.trim() || '';
-    const match = inputVal && val.replace(/[\s\-]/g,'').toLowerCase() === inputVal.replace(/[\s\-]/g,'').toLowerCase();
-    const badge = inputVal ? `<span class="ocr-badge ${match?'ok':'ng'}">${match?'일치':'불일치'}</span>` : '';
-    html += `<div class="ocr-row"><span class="ocr-key">${key}</span><span class="ocr-val">${val}</span>${badge}</div>`;
+  let html = results.innerHTML;
+  html += `<div style="font-weight:700;font-size:10px;color:#5F0080;margin:6px 0 2px;border-top:1px solid #e8d88a;padding-top:4px;">[${labels[docType]}] — ${cnt}개 자동 입력</div>`;
+  filledFields.forEach(({ key, val }) => {
+    html += `<div class="ocr-row"><span class="ocr-key">${key}</span><span class="ocr-val">${val}</span><span class="ocr-badge ok">자동입력</span></div>`;
   });
+  // OCR이 읽었지만 이미 값이 있어서 건너뛴 항목 표시
+  const allOcrKeys = Object.entries(ocr).filter(([k,v]) => v && v.trim() !== '');
+  if (allOcrKeys.length > cnt) {
+    const skipped = allOcrKeys.length - cnt;
+    html += `<div style="font-size:9px;color:#888;padding:2px 0;">+ ${skipped}개 항목은 이미 입력되어 있어 건너뜀</div>`;
+  }
   results.innerHTML = html;
+
+  showToast(`📄 ${labels[docType]}에서 ${cnt}개 항목 자동 입력`, 'info');
 }
 
 // ── 주소 검색 ──
