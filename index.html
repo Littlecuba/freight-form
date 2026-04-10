@@ -862,7 +862,7 @@ input.auto-filled {
 <script>
 // ── 설정 ──
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtDyNAcTGKZTWHyW_9zdaeIXUBfwbd0354QoHAN8GMeaMP5slZSelJYa7h5zRWT-hMSA/exec';
-const GEMINI_KEY = 'AIzaSyBrEFQ_NF2zp5qRCJC0tKymj_Ng-MxoItQ';
+// Gemini API 키는 Apps Script 서버에만 저장 (보안)
 
 // ── 서명 패드 ──
 const sigPads = {};
@@ -1021,27 +1021,24 @@ function toBase64(file) {
 }
 
 async function runOCR(base64, mimeType, docType) {
-  const prompts = {
-    license:  '이 운전면허증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
-              '{"name":"성명","rrn":"주민번호앞6자리숫자만","address":"주소전체","licenseNo":"면허번호(XX-XX-XXXXXX-XX형식)","licenseType":"면허종류(예:1종 보통)"}',
-    contract: '이 전속운송계약서 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
-              '{"companyName":"택배사업자명(위탁사)","agencyName":"대리점또는영업점명","agencyRepName":"대리점대표자성명","agencyAddress":"대리점주소전체","agencyPhone":"대리점연락처","contractYears":"계약기간년수숫자만","contractStart":"계약시작일YYYY-MM-DD","contractEnd":"계약종료일YYYY-MM-DD","name":"신청인(수탁인)성명"}',
-    vehicle:  '이 자동차등록증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
-              '{"vehicleNo":"차량번호","vehicleType":"차종(예:1톤 화물)","vehicleModel":"차명과연식(예:포터2(2020))","maxLoad":"최대적재량kg숫자만","vehicleShape":"차량형태(탑형 또는 밴형)","ownerName":"소유자성명","ownerAddress":"소유자주소"}',
-    cert:     '이 화물운송종사자격증 이미지에서 아래 JSON 형식으로만 응답해. 값이 없으면 빈 문자열로. ' +
-              '{"name":"성명","certNo":"자격증번호","certDate":"자격취득일YYYY-MM-DD","rrn":"주민번호앞6자리숫자만","address":"주소","phone":"연락처"}'
-  };
-  const url  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`;
-  const body = { contents: [{ parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: prompts[docType] }] }] };
-  const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  if (!resp.ok) {
-    if (resp.status === 400 || resp.status === 403) return null;
-    const err = await resp.json().catch(() => ({}));
-    throw new Error(`${resp.status}: ${err?.error?.message || '오류'}`);
-  }
-  const data  = await resp.json();
-  const text  = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-  return JSON.parse(text.replace(/```json|```/g, '').trim());
+  // Apps Script 서버를 통해 OCR 처리 (API 키 서버 보관)
+  const params = new URLSearchParams();
+  params.append('action', 'ocr');
+  params.append('imageData', base64);
+  params.append('mimeType', mimeType || 'image/png');
+  params.append('docType', docType);
+
+  const resp = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
+  });
+
+  if (!resp.ok) throw new Error(`서버 오류: ${resp.status}`);
+  const result = await resp.json();
+  if (result.status === 'success') return result.data;
+  if (result.status === 'error') throw new Error(result.message || 'OCR 처리 실패');
+  return null;
 }
 
 // ── 필드에 값 채우기 헬퍼 (이미 값이 있으면 덮어쓰지 않음) ──
