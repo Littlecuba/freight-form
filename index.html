@@ -1146,12 +1146,26 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
     if (setFieldValue('name', ocr.name))        filledFields.push({ key:'성명', val:ocr.name });
     if (setFieldValue('rrn1', ocr.rrn))          filledFields.push({ key:'주민번호(앞6)', val:ocr.rrn });
     if (ocr.address) {
-      // 주소는 readonly이므로 직접 설정
+      // 도로명주소 (readonly이므로 직접 설정)
       const addrEl = document.getElementById('address');
       if (addrEl && !addrEl.value.trim()) {
         addrEl.value = ocr.address;
         addrEl.classList.add('auto-filled');
         filledFields.push({ key:'주소', val:ocr.address });
+      }
+    }
+    // 상세주소 (OCR에서 분리 추출된 경우)
+    if (ocr.addressDetail) {
+      if (setFieldValue('addressDetail', ocr.addressDetail))
+        filledFields.push({ key:'상세주소', val:ocr.addressDetail });
+    }
+    // 우편번호 (OCR에서 추출된 경우)
+    if (ocr.postcode) {
+      const pcEl = document.getElementById('postcode');
+      if (pcEl && !pcEl.value.trim()) {
+        pcEl.value = String(ocr.postcode);
+        pcEl.classList.add('auto-filled');
+        filledFields.push({ key:'우편번호', val:ocr.postcode });
       }
     }
     if (setFieldValue('licenseNo', ocr.licenseNo)) filledFields.push({ key:'면허번호', val:ocr.licenseNo });
