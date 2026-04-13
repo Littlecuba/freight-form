@@ -610,7 +610,7 @@ input.auto-filled {
       <td class="sec-header" rowspan="6">② 전속운송계약</td>
       <td class="lbl">택배사업자 명</td>
       <td class="inp" colspan="2">
-        <input type="text" id="companyName" placeholder="예: CJ대한통운" data-required="true">
+        <input type="text" id="companyName" value="(주)컬리넥스트마일" data-required="true" readonly>
       </td>
     </tr>
     <tr>
@@ -1098,10 +1098,8 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
   }
 
   if (docType === 'contract') {
-    if (setFieldValue('companyName', ocr.companyName)) {
-      filledFields.push({ key:'택배사업자명', val:ocr.companyName });
-      setFieldValue('companyNameSign', ocr.companyName);
-    }
+    // 택배사업자명은 고정값 (주)컬리넥스트마일 — OCR로 덮어쓰지 않음
+    setFieldValue('companyNameSign', '(주)컬리넥스트마일');
     if (setFieldValue('agencyName', ocr.agencyName))       filledFields.push({ key:'대리점명', val:ocr.agencyName });
     if (setFieldValue('agencyRepName', ocr.agencyRepName)) {
       filledFields.push({ key:'대리점 대표자명', val:ocr.agencyRepName });
