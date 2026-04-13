@@ -607,26 +607,26 @@ input.auto-filled {
 
     <!-- ② 전속운송계약 -->
     <tr>
-      <td class="sec-header" rowspan="6">② 전속운송계약</td>
-      <td class="lbl">택배사업자 명</td>
+      <td class="sec-header" rowspan="7">② 전속운송계약</td>
+      <td class="lbl">택배서비스사업자 명</td>
       <td class="inp" colspan="2">
         <input type="text" id="companyName" value="(주)컬리넥스트마일" data-required="true" readonly>
       </td>
     </tr>
     <tr>
-      <td class="lbl">대리점(영업점) 명</td>
+      <td class="lbl">영업점(대리점) 명</td>
       <td class="inp" colspan="2">
         <input type="text" id="agencyName" placeholder="대리점명" data-required="true">
       </td>
     </tr>
     <tr>
-      <td class="lbl">대리점(영업점) 대표자명</td>
+      <td class="lbl">영업점(대리점) 대표자명</td>
       <td class="inp" colspan="2">
         <input type="text" id="agencyRepName" placeholder="대표자 성명" data-required="true">
       </td>
     </tr>
     <tr>
-      <td class="lbl">대리점(영업점) 주소</td>
+      <td class="lbl">영업점(대리점) 주소</td>
       <td class="inp" colspan="2">
         <div class="addr-wrap">
           <div class="addr-row1">
@@ -639,7 +639,7 @@ input.auto-filled {
       </td>
     </tr>
     <tr>
-      <td class="lbl">대리점(영업점) 연락처</td>
+      <td class="lbl">영업점(대리점) 연락처</td>
       <td class="inp" colspan="2">
         <input type="tel" id="agencyPhone" placeholder="02-0000-0000">
       </td>
@@ -667,19 +667,56 @@ input.auto-filled {
         </div>
       </td>
     </tr>
+    <tr>
+      <td class="lbl">택배서비스종사 경력기간</td>
+      <td class="inp" colspan="2">
+        <div style="padding:4px 6px; display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">경력기간 :</span>
+            <input type="number" id="careerYears" placeholder="0" min="0" max="50"
+              style="width:48px; text-align:center;">
+            <span style="font-size:12px; color:#555;">년</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">(경력기간) 시작 :</span>
+            <input type="month" id="careerStart" style="flex:1;">
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">종료 :</span>
+            <input type="month" id="careerEnd" style="flex:1;">
+          </div>
+        </div>
+      </td>
+    </tr>
 
     <!-- ③ 차량정보 -->
     <tr>
-      <td class="sec-header" rowspan="2">③ 차량정보</td>
-      <td class="lbl">차&nbsp;&nbsp;&nbsp;&nbsp;종</td>
+      <td class="sec-header" rowspan="3">③ 차량정보</td>
+      <td class="lbl">연&nbsp;&nbsp;&nbsp;&nbsp;료</td>
+      <td class="inp" colspan="2">
+        <div style="display:flex; flex-direction:column; gap:4px; padding:4px 6px;">
+          <div class="cb-group" style="padding:0; flex-wrap:wrap; gap:8px;">
+            <label class="cb-item"><input type="checkbox" name="fuelType" value="LPG"><span>LPG</span></label>
+            <label class="cb-item"><input type="checkbox" name="fuelType" value="경유"><span>경유</span></label>
+            <label class="cb-item"><input type="checkbox" name="fuelType" value="전기"><span>전기</span></label>
+            <label class="cb-item"><input type="checkbox" name="fuelType" value="휘발유"><span>휘발유</span></label>
+            <label class="cb-item"><input type="checkbox" name="fuelType" value="기타"><span>기타 (</span></label>
+            <input type="text" id="fuelEtc" placeholder="" style="width:80px;">
+            <span style="font-size:12px; color:#555;">)</span>
+          </div>
+          <span style="font-size:10px; color:#888;">＊「대기관리권역법」제28조 준수 필요</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="lbl">차&nbsp;&nbsp;&nbsp;&nbsp;명</td>
       <td class="inp">
-        <input type="text" id="vehicleType" placeholder="예: 1톤 화물" data-required="true">
+        <input type="text" id="vehicleModel" placeholder="예: 포터2" data-required="true">
       </td>
       <td class="inp">
         <div style="display:flex; align-items:center; gap:4px; padding:3px 0;">
-          <span style="font-size:11px; white-space:nowrap; color:#555;">차명(연식)</span>
-          <input type="text" id="vehicleModel" placeholder="포터2 (2020)">
-          <span style="font-size:11px; color:#555; white-space:nowrap;">( )</span>
+          <span style="font-size:11px; white-space:nowrap; color:#555;">연식 :</span>
+          <input type="text" id="vehicleYear" placeholder="예: 2020">
         </div>
       </td>
     </tr>
@@ -761,7 +798,7 @@ input.auto-filled {
 
     <table class="sign-table">
       <tr>
-        <td style="width:120px; color:#555;">회 사 명 :</td>
+        <td style="width:120px; color:#555;">택배서비스사업자명 :</td>
         <td>
           <input type="text" id="companyNameSign" value="(주)컬리넥스트마일" readonly>
         </td>
@@ -915,8 +952,11 @@ function fillDummyData() {
     contractYears:  '1',
     contractStart:  '2026-01-01',
     contractEnd:    '2026-12-31',
-    vehicleType:    '화물차',
+    careerYears:    '3',
+    careerStart:    '2023-01',
+    careerEnd:      '2026-01',
     vehicleModel:   '포터2',
+    vehicleYear:    '2020',
     maxLoad:        '1000',
     licenseNo:      '12-34-567890-12',
     certNo:         'FR-2024-12345',
@@ -932,6 +972,10 @@ function fillDummyData() {
       el.dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
+
+  // 연료 체크박스
+  const fuelChk = document.querySelector('input[name="fuelType"][value="경유"]');
+  if (fuelChk) { fuelChk.checked = true; fuelChk.dispatchEvent(new Event('change', { bubbles: true })); }
 
   // 차량 형태 체크박스
   const tapChk = document.querySelector('input[name="vehicleShape"][value="탑형"]');
@@ -1119,9 +1163,10 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
   }
 
   if (docType === 'vehicle') {
-    if (setFieldValue('vehicleType', ocr.vehicleType))   filledFields.push({ key:'차종', val:ocr.vehicleType });
-    if (setFieldValue('vehicleModel', ocr.vehicleModel)) filledFields.push({ key:'차명(연식)', val:ocr.vehicleModel });
-    if (setFieldValue('maxLoad', ocr.maxLoad))            filledFields.push({ key:'최대적재량', val:ocr.maxLoad + 'kg' });
+    if (setCheckboxValue('fuelType', ocr.fuelType))       filledFields.push({ key:'연료', val:ocr.fuelType });
+    if (setFieldValue('vehicleModel', ocr.vehicleModel))  filledFields.push({ key:'차명', val:ocr.vehicleModel });
+    if (setFieldValue('vehicleYear', ocr.vehicleYear))    filledFields.push({ key:'연식', val:ocr.vehicleYear });
+    if (setFieldValue('maxLoad', ocr.maxLoad))             filledFields.push({ key:'최대적재량', val:ocr.maxLoad + 'kg' });
     if (setCheckboxValue('vehicleShape', ocr.vehicleShape)) filledFields.push({ key:'차량형태', val:ocr.vehicleShape });
     // 소유자 정보로 성명/주소 보조 채우기
     if (ocr.ownerName) setFieldValue('name', ocr.ownerName);
@@ -1269,6 +1314,7 @@ async function handleSubmit() {
     const sig1 = sigPads[1]?.isEmpty() ? '' : sigPads[1].toDataURL('image/png');
     const sig2 = sigPads[2]?.isEmpty() ? '' : sigPads[2].toDataURL('image/png');
     const vehicleShape = [...document.querySelectorAll('input[name="vehicleShape"]:checked')].map(c => c.value).join(', ');
+    const fuelType     = [...document.querySelectorAll('input[name="fuelType"]:checked')].map(c => c.value).join(', ');
     const licenseType  = [...document.querySelectorAll('input[name="licenseType"]:checked')].map(c => c.value).join(', ');
 
     const params = new URLSearchParams();
@@ -1286,8 +1332,12 @@ async function handleSubmit() {
       agencyPhone: document.getElementById('agencyPhone').value,
       contractStart: document.getElementById('contractStart').value,
       contractEnd: document.getElementById('contractEnd').value,
-      vehicleType: document.getElementById('vehicleType').value,
+      careerYears: document.getElementById('careerYears').value,
+      careerStart: document.getElementById('careerStart').value,
+      careerEnd: document.getElementById('careerEnd').value,
+      fuelType, fuelEtc: document.getElementById('fuelEtc').value,
       vehicleModel: document.getElementById('vehicleModel').value,
+      vehicleYear: document.getElementById('vehicleYear').value,
       maxLoad: document.getElementById('maxLoad').value,
       vehicleShape, licenseNo: document.getElementById('licenseNo').value, licenseType,
       certNo: document.getElementById('certNo').value,
