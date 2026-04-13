@@ -1072,6 +1072,34 @@ async function handleUpload(input, type) {
   updateProgress();
 }
 
+// ── 우편번호 자동 조회 (Kakao API via Apps Script 프록시) ──
+async function lookupPostcode(address) {
+  try {
+    const pcEl = document.getElementById('postcode');
+    if (!pcEl || pcEl.value.trim()) return; // 이미 값 있으면 스킵
+    const params = new URLSearchParams();
+    params.append('action', 'postcodeSearch');
+    params.append('address', address);
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    });
+    const result = await resp.json();
+    if (result.status === 'success' && result.postcode) {
+      pcEl.value = result.postcode;
+      pcEl.classList.add('auto-filled');
+      // 도로명주소도 정규화된 값으로 업데이트
+      if (result.roadAddress) {
+        const addrEl = document.getElementById('address');
+        if (addrEl) { addrEl.value = result.roadAddress; }
+      }
+    }
+  } catch(e) {
+    console.warn('우편번호 조회 실패:', e.message);
+  }
+}
+
 function toBase64(file) {
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -1153,20 +1181,13 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
         addrEl.classList.add('auto-filled');
         filledFields.push({ key:'주소', val:ocr.address });
       }
+      // 우편번호 자동 조회 (Kakao API via Apps Script)
+      lookupPostcode(ocr.address);
     }
     // 상세주소 (OCR에서 분리 추출된 경우)
     if (ocr.addressDetail) {
       if (setFieldValue('addressDetail', ocr.addressDetail))
         filledFields.push({ key:'상세주소', val:ocr.addressDetail });
-    }
-    // 우편번호 (OCR에서 추출된 경우)
-    if (ocr.postcode) {
-      const pcEl = document.getElementById('postcode');
-      if (pcEl && !pcEl.value.trim()) {
-        pcEl.value = String(ocr.postcode);
-        pcEl.classList.add('auto-filled');
-        filledFields.push({ key:'우편번호', val:ocr.postcode });
-      }
     }
     if (setFieldValue('licenseNo', ocr.licenseNo)) filledFields.push({ key:'면허번호', val:ocr.licenseNo });
     if (setCheckboxValue('licenseType', ocr.licenseType)) filledFields.push({ key:'면허종류', val:ocr.licenseType });
