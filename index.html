@@ -1104,12 +1104,13 @@ async function runOCR(base64, mimeType, docType) {
 
 // ── 필드에 값 채우기 헬퍼 (이미 값이 있으면 덮어쓰지 않음) ──
 function setFieldValue(id, value, forceOverwrite) {
-  if (!value || value.trim() === '') return false;
+  if (value === null || value === undefined || value === '') return false;
+  const str = String(value).trim();
+  if (str === '') return false;
   const el = document.getElementById(id);
   if (!el) return false;
-  // 이미 사용자가 입력한 값이 있으면 건너뜀 (forceOverwrite가 아닌 경우)
   if (el.value.trim() !== '' && !forceOverwrite) return false;
-  el.value = value.trim();
+  el.value = str;
   el.classList.add('auto-filled');
   el.dispatchEvent(new Event('input', { bubbles: true }));
   el.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1118,8 +1119,9 @@ function setFieldValue(id, value, forceOverwrite) {
 
 // ── 체크박스 자동 선택 헬퍼 ──
 function setCheckboxValue(name, value) {
-  if (!value || value.trim() === '') return false;
-  const val = value.trim();
+  if (value === null || value === undefined || value === '') return false;
+  const val = String(value).trim();
+  if (val === '') return false;
   const cbs = document.querySelectorAll(`input[name="${name}"]`);
   let matched = false;
   cbs.forEach(cb => {
