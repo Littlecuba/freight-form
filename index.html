@@ -113,6 +113,12 @@ input[readonly] {
 
 input.verified { border-bottom: 1.5px solid #1a7a3c; background: #f0fff4; }
 input.mismatch { border-bottom: 1.5px solid #c0392b; background: #fff5f5; }
+input.field-error { border-bottom: 1.5px solid #c0392b !important; background: rgba(192, 57, 43, 0.08) !important; animation: errorShake 0.3s ease; }
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
 
 /* OCR 자동 채워진 필드 */
 input.auto-filled {
@@ -1337,9 +1343,44 @@ function updateProgress() {
   document.getElementById('progressPct').textContent  = pct + '%';
 }
 
+// ── 필수 입력 검증 ──
+function validateRequired() {
+  const requiredFields = [
+    'name', 'rrn1', 'address', 'phone',
+    'agencyName', 'agencyRepName', 'agencyAddress',
+    'contractYears', 'contractStart', 'contractEnd',
+    'vehicleModel', 'maxLoad', 'licenseNo',
+    'certNo', 'certDate'
+  ];
+  // 기존 에러 초기화
+  document.querySelectorAll('input.field-error').forEach(el => el.classList.remove('field-error'));
+
+  let firstError = null;
+  requiredFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (!el.value.trim()) {
+      el.classList.add('field-error');
+      if (!firstError) firstError = el;
+      // 입력 시 에러 해제
+      el.addEventListener('input', function onInput() {
+        if (el.value.trim()) el.classList.remove('field-error');
+        el.removeEventListener('input', onInput);
+      }, { once: true });
+    }
+  });
+  return firstError;
+}
+
 // ── 제출 ──
 async function handleSubmit() {
-  // [테스트 모드] 필수값 검사 비활성화
+  const firstError = validateRequired();
+  if (firstError) {
+    showToast('⚠️ 필수 입력 항목을 모두 입력해주세요.', 'error');
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    firstError.focus();
+    return;
+  }
 
   const btn = document.querySelector('.submit-btn-main');
   btn.disabled = true;
