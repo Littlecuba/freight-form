@@ -1363,6 +1363,7 @@ async function handleSubmit() {
     const licenseType  = [...document.querySelectorAll('input[name="licenseType"]:checked')].map(c => c.value).join(', ');
 
     const params = new URLSearchParams();
+    params.append('action', 'submit'); // 폼 제출임을 명시
     const fields = {
       name: document.getElementById('name').value,
       rrn1: document.getElementById('rrn1').value,
