@@ -566,16 +566,16 @@ input.auto-filled {
       <td class="sec-header" rowspan="4">① 신청인</td>
       <td class="lbl">성&nbsp;&nbsp;&nbsp;&nbsp;명</td>
       <td class="inp" colspan="2">
-        <input type="text" id="name" placeholder="홍길동" data-required="true">
+        <input type="text" id="name" placeholder="홍길동">
       </td>
     </tr>
     <tr>
       <td class="lbl">주민등록번호</td>
       <td class="inp" colspan="2">
         <div class="rrn-wrap">
-          <input type="text" id="rrn1" placeholder="앞 6자리" maxlength="6" data-required="true" inputmode="numeric" style="width:90px;">
+          <input type="text" id="rrn1" placeholder="앞 6자리" maxlength="6" inputmode="numeric" style="width:90px;">
           <span class="rrn-sep">-</span>
-          <input type="password" id="rrn2" placeholder="뒷 7자리" maxlength="7" data-required="true" inputmode="numeric" style="letter-spacing:2px;">
+          <input type="password" id="rrn2" placeholder="뒷 7자리" maxlength="7" inputmode="numeric" style="letter-spacing:2px;">
         </div>
       </td>
     </tr>
@@ -587,7 +587,7 @@ input.auto-filled {
             <input type="text" id="postcode" placeholder="우편번호" readonly style="width:90px;">
             <button type="button" class="search-btn" onclick="searchAddress('main')">주소 검색</button>
           </div>
-          <input type="text" id="address" placeholder="도로명 주소" data-required="true" readonly style="margin-bottom:3px;">
+          <input type="text" id="address" placeholder="도로명 주소" readonly style="margin-bottom:3px;">
           <input type="text" id="addressDetail" placeholder="상세주소 (동/호수)">
         </div>
       </td>
@@ -595,7 +595,7 @@ input.auto-filled {
     <tr>
       <td class="lbl">연&nbsp;&nbsp;&nbsp;&nbsp;락&nbsp;&nbsp;&nbsp;&nbsp;처</td>
       <td class="inp" style="width:40%;">
-        <input type="tel" id="phone" placeholder="010-0000-0000" data-required="true">
+        <input type="tel" id="phone" placeholder="010-0000-0000">
       </td>
       <td class="inp" style="width:40%;">
         <div style="display:flex; align-items:center; gap:4px; padding:3px 0;">
@@ -610,19 +610,19 @@ input.auto-filled {
       <td class="sec-header" rowspan="7">② 전속운송계약</td>
       <td class="lbl">택배서비스사업자 명</td>
       <td class="inp" colspan="2">
-        <input type="text" id="companyName" value="(주)컬리넥스트마일" data-required="true" readonly>
+        <input type="text" id="companyName" value="(주)컬리넥스트마일" readonly>
       </td>
     </tr>
     <tr>
       <td class="lbl">영업점(대리점) 명</td>
       <td class="inp" colspan="2">
-        <input type="text" id="agencyName" placeholder="대리점명" data-required="true">
+        <input type="text" id="agencyName" placeholder="대리점명">
       </td>
     </tr>
     <tr>
       <td class="lbl">영업점(대리점) 대표자명</td>
       <td class="inp" colspan="2">
-        <input type="text" id="agencyRepName" placeholder="대표자 성명" data-required="true">
+        <input type="text" id="agencyRepName" placeholder="대표자 성명">
       </td>
     </tr>
     <tr>
@@ -633,7 +633,7 @@ input.auto-filled {
             <input type="text" id="agencyPostcode" placeholder="우편번호" readonly style="width:90px;">
             <button type="button" class="search-btn" onclick="searchAddress('agency')">주소 검색</button>
           </div>
-          <input type="text" id="agencyAddress" placeholder="대리점 도로명 주소" data-required="true" readonly style="margin-bottom:3px;">
+          <input type="text" id="agencyAddress" placeholder="대리점 도로명 주소" readonly style="margin-bottom:3px;">
           <input type="text" id="agencyAddressDetail" placeholder="상세주소">
         </div>
       </td>
@@ -652,17 +652,17 @@ input.auto-filled {
             <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">전속운송계약기간 :</span>
             <div style="display:flex; align-items:center; gap:4px;">
               <input type="number" id="contractYears" placeholder="0" min="0" max="10"
-                style="width:48px; text-align:center;" data-required="true">
+                style="width:48px; text-align:center;">
               <span style="font-size:12px; color:#555;">년</span>
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">계약시작일 :</span>
-            <input type="date" id="contractStart" data-required="true" style="flex:1;">
+            <input type="date" id="contractStart" style="flex:1;">
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:12px; color:#555; white-space:nowrap; min-width:110px;">계약종료일 :</span>
-            <input type="date" id="contractEnd" data-required="true" style="flex:1;">
+            <input type="date" id="contractEnd" style="flex:1;">
           </div>
         </div>
       </td>
@@ -711,7 +711,7 @@ input.auto-filled {
     <tr>
       <td class="lbl">차&nbsp;&nbsp;&nbsp;&nbsp;명</td>
       <td class="inp">
-        <input type="text" id="vehicleModel" placeholder="예: 포터2" data-required="true">
+        <input type="text" id="vehicleModel" placeholder="예: 포터2">
       </td>
       <td class="inp">
         <div style="display:flex; align-items:center; gap:4px; padding:3px 0;">
@@ -725,7 +725,7 @@ input.auto-filled {
       <td class="inp">
         <div style="display:flex; align-items:center; gap:4px; padding:3px 6px;">
           <span style="font-size:11px; color:#555;">( </span>
-          <input type="text" id="maxLoad" placeholder="1,000" data-required="true" style="text-align:right; max-width:80px;">
+          <input type="text" id="maxLoad" placeholder="1,000" style="text-align:right; max-width:80px;">
           <span style="font-size:11px; color:#555;"> ) kg</span>
         </div>
       </td>
@@ -751,7 +751,7 @@ input.auto-filled {
       <td class="sec-header" rowspan="2">④ 운전면허</td>
       <td class="lbl">면&nbsp;&nbsp;허&nbsp;&nbsp;번&nbsp;&nbsp;호</td>
       <td class="inp" colspan="2">
-        <input type="text" id="licenseNo" placeholder="00-00-000000-00" data-required="true">
+        <input type="text" id="licenseNo" placeholder="00-00-000000-00">
       </td>
     </tr>
     <tr>
@@ -771,12 +771,12 @@ input.auto-filled {
       <td class="sec-header">⑤ 화물운송종사자격</td>
       <td class="lbl">자격증번호</td>
       <td class="inp">
-        <input type="text" id="certNo" placeholder="자격증번호" data-required="true">
+        <input type="text" id="certNo" placeholder="자격증번호">
       </td>
       <td class="inp">
         <div style="display:flex; align-items:center; gap:4px; padding:3px 0;">
           <span style="font-size:11px; color:#555; white-space:nowrap;">자격취득일</span>
-          <input type="date" id="certDate" data-required="true">
+          <input type="date" id="certDate">
         </div>
       </td>
     </tr>
@@ -1308,21 +1308,7 @@ function updateProgress() {
 
 // ── 제출 ──
 async function handleSubmit() {
-  const missing = [];
-  document.querySelectorAll('[data-required="true"]').forEach(el => {
-    if (!el.value.trim()) {
-      const lbl = el.closest('tr')?.querySelector('.lbl');
-      if (lbl) missing.push(lbl.textContent.trim());
-      el.style.borderBottom = '1.5px solid #c0392b';
-    } else el.style.borderBottom = '';
-  });
-  if (missing.length > 0) { showToast('⚠ 필수 항목을 입력해주세요', 'error'); return; }
-  if (!document.getElementById('privacyAgree1').checked || !document.getElementById('privacyAgree2').checked) {
-    showToast('⚠ 개인정보 동의를 모두 체크해주세요', 'error'); return;
-  }
-  if (sigPads[1]?.isEmpty() || sigPads[2]?.isEmpty()) {
-    showToast('⚠ 두 동의서 모두 서명해주세요', 'error'); return;
-  }
+  // [테스트 모드] 필수값 검사 비활성화
 
   const btn = document.querySelector('.submit-btn-main');
   btn.disabled = true;
