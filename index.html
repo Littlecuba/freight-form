@@ -1241,7 +1241,7 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
     html += `<div class="ocr-row"><span class="ocr-key">${key}</span><span class="ocr-val">${val}</span><span class="ocr-badge ok">자동입력</span></div>`;
   });
   // OCR이 읽었지만 이미 값이 있어서 건너뛴 항목 표시
-  const allOcrKeys = Object.entries(ocr).filter(([k,v]) => v && v.trim() !== '');
+  const allOcrKeys = Object.entries(ocr).filter(([k,v]) => v !== null && v !== undefined && String(v).trim() !== '');
   if (allOcrKeys.length > cnt) {
     const skipped = allOcrKeys.length - cnt;
     html += `<div style="font-size:9px;color:#888;padding:2px 0;">+ ${skipped}개 항목은 이미 입력되어 있어 건너뜀</div>`;
