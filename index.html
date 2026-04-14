@@ -920,12 +920,7 @@ window.addEventListener('load', () => {
   document.getElementById('name').addEventListener('input', function() {
     document.getElementById('applicantName').value = this.value;
   });
-  document.getElementById('companyName').addEventListener('input', function() {
-    document.getElementById('companyNameSign').value = this.value;
-  });
-  document.getElementById('agencyRepName').addEventListener('input', function() {
-    document.getElementById('ceoName').value = this.value;
-  });
+  // companyNameSign, ceoName 은 고정값 — 이벤트 연동 없음
 
   // ── 개발 모드: 더미데이터 자동 채우기 ──
   // ⚠️ 테스트 완료 후 아래 fillDummyData() 호출 줄을 삭제하세요
@@ -1010,10 +1005,8 @@ function fillDummyData() {
     if (el) { el.checked = true; el.dispatchEvent(new Event('change', { bubbles: true })); }
   });
 
-  // 하단 서명란 이름 연동
+  // 하단 서명란 이름 연동 (companyNameSign, ceoName 은 고정값 유지)
   document.getElementById('applicantName').value = d.name;
-  document.getElementById('companyNameSign').value = d.companyName;
-  document.getElementById('ceoName').value = d.agencyRepName;
 
   updateProgress();
   console.log('✅ 더미데이터 채우기 완료');
@@ -1201,7 +1194,7 @@ function autoFillFromOCR(docType, ocr, statusEl, fname) {
     if (setFieldValue('agencyName', ocr.agencyName))       filledFields.push({ key:'대리점명', val:ocr.agencyName });
     if (setFieldValue('agencyRepName', ocr.agencyRepName)) {
       filledFields.push({ key:'대리점 대표자명', val:ocr.agencyRepName });
-      setFieldValue('ceoName', ocr.agencyRepName);
+      // ceoName 은 '이 보 영' 고정값 유지 — OCR로 덮어쓰지 않음
     }
     if (ocr.agencyAddress) {
       const addrEl = document.getElementById('agencyAddress');
