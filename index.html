@@ -1408,7 +1408,7 @@ async function handleSubmit() {
       address: document.getElementById('address').value,
       addressDetail: document.getElementById('addressDetail').value,
       phone: document.getElementById('phone').value,
-      mobile: document.getElementById('mobile').value,
+      mobile: document.getElementById('mobile')?.value ?? '',
       companyName: document.getElementById('companyName').value,
       agencyName: document.getElementById('agencyName').value,
       agencyRepName: document.getElementById('agencyRepName').value,
